@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SPWC LOSS INTAKE</title>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root{
+      --bg:#ffffff;        /* white */
+      --panel:#f8f9fa;     /* light gray */
+      --muted:#e9ecef;     /* gray */
+      --text:#212529;      /* dark gray/black */
+      --accent:#0d6efd;    /* blue */
+      --accent2:#6610f2;   /* purple */
+      --ok:#198754;        /* green */
+      --warn:#ffc107;      /* amber */
+      --danger:#dc3545;    /* red */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:white;color:var(--text);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    h1{font-size:28px;margin:0;color:var(--text)}
+    .badge{font-size:12px;background:linear-gradient(90deg,var(--accent),var(--accent2));padding:6px 10px;border-radius:999px;color:white}
+    .panel{background:#f8f9fa;border:1px solid #dee2e6;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+    .col-6{grid-column:span 6}
+    .col-12{grid-column:span 12}
+    .col-4{grid-column:span 4}
+    .col-3{grid-column:span 3}
+    .col-2{grid-column:span 2}
+    label{display:block;font-size:12px;color:#495057;margin:2px 2px 6px}
+    input,select,textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #ced4da;background:white;color:var(--text);outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(13,110,253,.1)}
+    textarea{min-height:90px}
+    .hint{font-size:12px;color:#6c757d}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{cursor:pointer;border:0;border-radius:12px;padding:10px 14px;font-weight:600}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:white}
+    .btn-ghost{background:transparent;border:1px solid #ced4da;color:var(--text)}
+    .btn-danger{background:var(--danger);color:white}
+    .section-title{font-weight:700;letter-spacing:.2px;margin:0 0 8px;font-size:16px;color:var(--text)}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#e9ecef;border:1px solid #dee2e6;border-radius:999px;padding:6px 10px;margin:0 8px 8px 0;font-size:12px;color:var(--text);cursor:pointer;white-space:nowrap}
+    .pill input[type="checkbox"]{width:auto;margin:0;cursor:pointer}
+    .pill:hover{background:#dee2e6}
+    .footer{color:#6c757d;font-size:12px;margin-top:8px}
+    @media (max-width:900px){.col-6,.col-4,.col-3,.col-2{grid-column:span 12}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>SPWC LOSS INTAKE</h1>
+      <span class="badge">Excel Export Ready</span>
+    </header>
+
+    <!-- Caller & Loss Identification -->
+    <section class="panel">
+      <p class="section-title">CALLER & LOSS IDENTIFICATION</p>
+      <div class="grid">
+        <div class="col-4">
+          <label for="callerType">Caller Type</label>
+          <select id="callerType" required>
+            <option value="">Select…</option>
+            <option>Homeowner</option>
+            <option>Adjuster</option>
+            <option>Property Manager / HOA</option>
+            <option>GC</option>
+            <option>Tenant</option>
+          </select>
+        </div>
+        <div class="col-4">
+          <label for="callerName">Caller Name</label>
+          <input id="callerName" placeholder="Jane Smith" required />
+        </div>
+        <div class="col-4">
+          <label for="callerPhone">Caller Phone</label>
+          <input id="callerPhone" type="tel" placeholder="(555) 555-5555" required />
+        </div>
+        <div class="col-6">
+          <label for="callerEmail">Caller Email</label>
+          <input id="callerEmail" type="email" placeholder="name@email.com" />
+        </div>
+        <div class="col-6">
+          <label for="relationship">Relationship to Property</label>
+          <select id="relationship">
+            <option value="">Select…</option>
+            <option>Owner</option>
+            <option>Insured</option>
+            <option>Tenant</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Property & Access -->
+    <section class="panel">
+      <p class="section-title">PROPERTY & ACCESS</p>
+      <div class="grid">
+        <div class="col-6">
+          <label for="address">Loss Address</label>
+          <input id="address" placeholder="123 Main St" required />
+        </div>
+        <div class="col-2">
+          <label for="city">City</label>
+          <input id="city" />
+        </div>
+        <div class="col-2">
+          <label for="state">State</label>
+          <input id="state" maxlength="2" placeholder="TN" />
+        </div>
+        <div class="col-2">
+          <label for="zip">ZIP</label>
+          <input id="zip" />
+        </div>
+        <div class="col-6">
+          <label for="access">Access Instructions</label>
+          <input id="access" placeholder="Gate code, lockbox, pets…" />
+        </div>
+        <div class="col-3">
+          <label for="onsiteName">On-site Contact Name</label>
+          <input id="onsiteName" />
+        </div>
+        <div class="col-3">
+          <label for="onsitePhone">On-site Contact Phone</label>
+          <input id="onsitePhone" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Loss Details -->
+    <section class="panel">
+      <p class="section-title">LOSS DETAILS</p>
+      <div class="grid">
+        <div class="col-3">
+          <label for="lossType">Loss Type</label>
+          <select id="lossType" required>
+            <option value="">Select…</option>
+            <option>Water</option>
+            <option>Fire</option>
+            <option>Mold</option>
+            <option>Bio</option>
+            <option>Trauma</option>
+            <option>Board-up</option>
+            <option>Reconstruction</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="source">Source of Loss</label>
+          <input id="source" placeholder="e.g., burst supply line" />
+        </div>
+        <div class="col-3">
+          <label for="lossDate">Loss Date/Time</label>
+          <input id="lossDate" type="datetime-local" />
+        </div>
+        <div class="col-3">
+          <label for="activeLeak">Active Leak?</label>
+          <select id="activeLeak">
+            <option value="">Select…</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="category">Water Category</label>
+          <select id="category">
+            <option value="">N/A / Unknown</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="wclass">Water Class</label>
+          <select id="wclass">
+            <option value="">N/A / Unknown</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label for="areas">Affected Areas</label>
+          <div id="areas" class="row" style="padding:6px 0">
+            <label class="pill"><input type="checkbox" value="Kitchen"> Kitchen</label>
+            <label class="pill"><input type="checkbox" value="Bath"> Bath</label>
+            <label class="pill"><input type="checkbox" value="Living Room"> Living Room</label>
+            <label class="pill"><input type="checkbox" value="Bedroom"> Bedroom</label>
+            <label class="pill"><input type="checkbox" value="Basement"> Basement</label>
+            <label class="pill"><input type="checkbox" value="Attic"> Attic</label>
+            <label class="pill"><input type="checkbox" value="Exterior"> Exterior</label>
+          </div>
+        </div>
+        <div class="col-3">
+          <label for="sqft">Estimated Affected SF</label>
+          <input id="sqft" type="number" min="0" step="1" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Insurance -->
+    <section class="panel">
+      <p class="section-title">INSURANCE</p>
+      <div class="grid">
+        <div class="col-3">
+          <label for="carrier">Carrier</label>
+          <input id="carrier" />
+        </div>
+        <div class="col-3">
+          <label for="claim">Claim #</label>
+          <input id="claim" />
+        </div>
+        <div class="col-3">
+          <label for="adjName">Adjuster Name</label>
+          <input id="adjName" />
+        </div>
+        <div class="col-3">
+          <label for="adjEmail">Adjuster Email</label>
+          <input id="adjEmail" type="email" />
+        </div>
+        <div class="col-3">
+          <label for="adjPhone">Adjuster Phone</label>
+          <input id="adjPhone" />
+        </div>
+        <div class="col-3">
+          <label for="deductible">Deductible ($)</label>
+          <input id="deductible" type="number" min="0" step="0.01" />
+        </div>
+        <div class="col-3">
+          <label for="coverage">Coverage Confirmed</label>
+          <select id="coverage">
+            <option value="">Unknown</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dispatch -->
+    <section class="panel">
+      <p class="section-title">DISPATCH</p>
+      <div class="grid">
+        <div class="col-3">
+          <label for="urgency">Urgency</label>
+          <select id="urgency">
+            <option value="">Select…</option>
+            <option>Emergency (1–3 hrs)</option>
+            <option>Same Day</option>
+            <option>Next Day</option>
+            <option>Scheduled</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="arrival">Preferred Arrival Window</label>
+          <input id="arrival" placeholder="e.g., 2–4pm" />
+        </div>
+        <div class="col-3">
+          <label for="branch">Branch Assignment</label>
+          <input id="branch" placeholder="e.g., Nashville" />
+        </div>
+        <div class="col-3">
+          <label for="assigned">PM/Tech Assigned</label>
+          <input id="assigned" placeholder="Optional" />
+        </div>
+        <div class="col-12">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Special instructions, hazards, pets, etc."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- Authorization & Payment -->
+    <section class="panel">
+      <p class="section-title">AUTHORIZATION & PAYMENT</p>
+      <div class="grid">
+        <div class="col-3">
+          <label for="authReq">Authorization Required</label>
+          <select id="authReq">
+            <option value="">Select…</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="payMethod">Payment Method</label>
+          <select id="payMethod">
+            <option value="">Select…</option>
+            <option>QBO Payment Link</option>
+            <option>Apple Pay</option>
+            <option>Card on File</option>
+            <option>Check on Site</option>
+          </select>
+        </div>
+        <div class="col-3">
+          <label for="authSigner">Authorized Signer</label>
+          <input id="authSigner" />
+        </div>
+        <div class="col-3">
+          <label for="authPhone">Authorized Signer Phone/Email</label>
+          <input id="authPhone" placeholder="(555) 555-5555 or email" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls -->
+    <section class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <div class="row">
+        <button class="btn btn-primary" id="btnExport">Export to Excel (.xlsx)</button>
+        <button class="btn btn-ghost" id="btnCSV">Export CSV</button>
+      </div>
+      <div class="row">
+        <button class="btn btn-danger" id="btnClear">Clear Form</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // ----- Helpers -----
+    const $ = (id) => document.getElementById(id);
+
+    function getCheckedValues(containerId){
+      const container = $(containerId);
+      if(!container) return [];
+      const inputs = container.querySelectorAll('input[type="checkbox"]:checked');
+      return Array.from(inputs).map(i=>i.value);
+    }
+
+    function requiredOk(){
+      const required = ['callerType','callerName','callerPhone','address','lossType'];
+      for(const id of required){
+        if(!$(id).value){
+          $(id).scrollIntoView({behavior:'smooth',block:'center'});
+          $(id).style.borderColor = 'var(--danger)';
+          setTimeout(()=>$(id).style.borderColor='rgba(255,255,255,.12)',1500);
+          alert('Please complete required field: '+id);
+          return false;
+        }
+      }
+      // Water-specific validation
+      if($("lossType").value === 'Water'){
+        if(!$("category").value || !$("wclass").value){
+          alert('For Water losses, please specify Category and Class.');
+          return false;
+        }
+      }
+      return true;
+    }
+
+    function headers(){
+      return [
+        'Caller Type','Caller Name','Caller Phone','Caller Email','Relationship to Property',
+        'Loss Address','City','State','ZIP','Access Instructions','Onsite Contact Name','Onsite Contact Phone',
+        'Loss Type','Source of Loss','Loss Date/Time','Active Leak','Category','Class','Affected Areas','Estimated Affected SF',
+        'Insurance Carrier','Claim Number','Adjuster Name','Adjuster Email','Adjuster Phone','Deductible','Coverage Confirmed',
+        'Urgency Level','Arrival Window','Notes','Branch Assignment','PM/Technician Assigned','Authorization Required','Payment Method','Authorized Signer Name','Authorized Signer Phone/Email'
+      ];
+    }
+
+    function collectRow(){
+      const affected = getCheckedValues('areas').join(', ');
+      return [
+        $('callerType').value,
+        $('callerName').value,
+        $('callerPhone').value,
+        $('callerEmail').value,
+        $('relationship').value,
+        $('address').value,
+        $('city').value,
+        $('state').value,
+        $('zip').value,
+        $('access').value,
+        $('onsiteName').value,
+        $('onsitePhone').value,
+        $('lossType').value,
+        $('source').value,
+        $('lossDate').value,
+        $('activeLeak').value,
+        $('category').value,
+        $('wclass').value,
+        affected,
+        $('sqft').value,
+        $('carrier').value,
+        $('claim').value,
+        $('adjName').value,
+        $('adjEmail').value,
+        $('adjPhone').value,
+        $('deductible').value,
+        $('coverage').value,
+        $('urgency').value,
+        $('arrival').value,
+        $('notes').value,
+        $('branch').value,
+        $('assigned').value,
+        $('authReq').value,
+        $('payMethod').value,
+        $('authSigner').value,
+        $('authPhone').value,
+      ];
+    }
+
+    function toCSVRow(arr){
+      return arr.map(v => {
+        if(v==null) return '';
+        const s = String(v).replaceAll('"','""');
+        return s.includes(',')||s.includes('\n')||s.includes('"') ? `"${s}"` : s;
+      }).join(',');
+    }
+
+    // ----- Export Handlers -----
+    document.getElementById('btnExport').addEventListener('click', () => {
+      if(!requiredOk()) return;
+      const data = [headers(), collectRow()];
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Intake');
+
+      // Autofit columns (approx)
+      const colWidths = headers().map(h => ({wch: Math.max(14, h.length + 2)}));
+      ws['!cols'] = colWidths;
+
+      const fileName = `intake_${new Date().toISOString().slice(0,10)}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+    });
+
+    document.getElementById('btnCSV').addEventListener('click', () => {
+      if(!requiredOk()) return;
+      const rows = [headers(), collectRow()].map(toCSVRow).join('\n');
+      const blob = new Blob([rows], {type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `intake_${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('btnClear').addEventListener('click', () => {
+      document.querySelectorAll('input, select, textarea').forEach(el => {
+        if(el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>
